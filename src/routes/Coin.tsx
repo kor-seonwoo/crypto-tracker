@@ -1,8 +1,8 @@
-// import { useState,useEffect } from "react";
-import { Link, Route, Switch, useLocation, useParams, useRouteMatch } from "react-router-dom"
+import { useEffect } from "react";
+import { Link, useLocation, useParams, useMatch, useOutletContext } from "react-router-dom"
 import styled from "styled-components";
-import Price from "./Price";
-import Chart from "./Chart";
+// import Price from "../components/Price";
+// import Chart from "../components/Chart";
 import { useQuery } from "react-query";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import { Helmet } from "react-helmet";
@@ -18,25 +18,23 @@ const Loader = styled.span`
 `;
 
 const Container = styled.div`
-  padding: 0px 20px;
-  max-width: 480px;
-  margin: 0 auto;
+  position: relative;
 `;
 
 const HomeMove = styled.div`
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 0;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   background-color: ${(props) => props.theme.textColor};
   border-radius: 50%;
   color: ${(props) => props.theme.bgColor};
   svg{
-    width: 29px;
+    width: 22px;
   }
 `;
 
@@ -67,10 +65,6 @@ const OverviewItem = styled.div`
   }
 `;
 
-const Description = styled.p`
-  margin: 20px 0px;
-`;
-
 const Tabs = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -91,13 +85,6 @@ const Tab = styled.span<{$isActive : boolean}>`
     display: block;
   }
 `;
-
-interface RouteParams {
-  coinId : string;
-}
-interface RouteState {
-  name: string;
-}
 
 interface IInfoData {
     id : string;
@@ -155,13 +142,19 @@ interface IPriceData {
     };
 }
 
+interface outletProps {
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
+}
+
 export default function Coin() {
-    const {coinId} = useParams<RouteParams>();
-    const { state } = useLocation<RouteState>();
-    const priceMatch = useRouteMatch('/:conId/price');
-    const chartMatch = useRouteMatch('/:conId/chart');
-    const { isLoading : infoLoading, data : inforData } = useQuery<IInfoData>(["info",coinId], () => fetchCoinInfo(coinId))
-    const { isLoading : tickersLoading, data : tickersData } = useQuery<IPriceData>(["tickers",coinId], () => fetchCoinTickers(coinId))
+    const {coinId} = useParams();
+    const {state} = useLocation();
+    const priceMatch = useMatch('/:conId/price');
+    const chartMatch = useMatch('/:conId/chart');
+    const {isLoading : infoLoading, data : inforData} = useQuery<IInfoData>(["info",coinId], () => coinId ? fetchCoinInfo(coinId) : Promise.reject('No coinId'))
+    const {isLoading : tickersLoading, data : tickersData} = useQuery<IPriceData>(["tickers",coinId], () => coinId ? fetchCoinTickers(coinId) : Promise.reject('No coinId'))
+    const {setTitle,setDescription} = useOutletContext<outletProps>();
     /* const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState<IInfoData>();
     const [priceInfo, setPriceInfo] = useState<IPriceData>();
@@ -179,6 +172,12 @@ export default function Coin() {
         })();
     }, [coinId]); */
     const loading = infoLoading || tickersLoading;
+    useEffect(() => {
+      if (!loading && (inforData?.description !== undefined || inforData?.name !== undefined)) {
+        setTitle(inforData?.name);
+        setDescription(inforData?.description);
+      }
+    },[loading, inforData, setDescription, setTitle]);
     return (
         <Container>
           <Helmet>
@@ -186,7 +185,7 @@ export default function Coin() {
             <link rel="icon" type="image/png" href={`https://coinicons-api.vercel.app/api/icon/${inforData?.symbol.toLowerCase()}`} sizes="16x16" />
           </Helmet>
           <HomeMove>
-            <Link to="/">
+            <Link to="/" onClick={() => {setTitle("Crypto-tracker"); setDescription("");}}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
               </svg>
@@ -216,7 +215,6 @@ export default function Coin() {
                         <span>${tickersData?.quotes.USD.price.toFixed(3)}</span>
                     </OverviewItem>
                 </Overview>
-                <Description>{inforData?.description}</Description>
                 <Overview>
                     <OverviewItem>
                         <span>Total Suply:</span>
@@ -235,14 +233,14 @@ export default function Coin() {
                         <Link to={`/${coinId}/price`}>Price</Link>
                     </Tab>
                 </Tabs>
-                <Switch>
+                {/* <Switch>
                     <Route path={`/${coinId}/price`}>
                         <Price />
                     </Route>
                     <Route path={`/${coinId}/chart`}>
                         <Chart coinId={coinId} />
                     </Route>
-                </Switch>
+                </Switch> */}
             </>
           )
           }

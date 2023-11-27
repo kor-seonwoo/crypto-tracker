@@ -1,9 +1,12 @@
 import { ThemeProvider, createGlobalStyle } from "styled-components";
-import Router from "./Router";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { darkTheme, lightTheme } from "./theme";
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "./atoms";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Layout from "./components/Layout";
+import Coin from "./routes/Coin";
+import Coins from "./routes/Coins";
 
 const GlobalReset = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400&family=Noto+Serif+KR:wght@300;400&display=swap');
@@ -70,13 +73,30 @@ const GlobalReset = createGlobalStyle`
   }
 `
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        path: "",
+        element: <Coins />
+      },
+      {
+        path: "coin/:coinId",
+        element: <Coin />,
+      }
+    ]
+  },
+]);
+
 function App() {
   const isDark = useRecoilValue(isDarkAtom);
   return (
     <>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <GlobalReset />
-        <Router />
+        <RouterProvider router={router} />
         <ReactQueryDevtools initialIsOpen={false} />
       </ThemeProvider>
     </>

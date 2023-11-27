@@ -1,26 +1,25 @@
-import { useState, useEffect } from "react";
-import { useQueries, useQuery } from "react-query";
+import { useInfiniteQuery, useQueries, useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components"
 import { fetchCoinHistory, fetchCoins } from "../api";
 import ApexCharts from "react-apexcharts";
-import { useSetRecoilState,useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "../atoms";
 
 const Container = styled.div`
-    width: calc(100% - 400px);
-    padding: 0 10px;
+    width: 100%;
 `;
 
-const Header = styled.header`
+const Header = styled.div`
     padding: 12px 10px 15px;
-    background-color: ${(props) => props.theme.textColor};
+    background-color: ${(props) => props.theme.bgColor};
     margin-bottom: 5px;
+    border-radius: 10px;
 `;
 
 const Title = styled.h1`
     font-size: 21px;
-    color: ${(props) => props.theme.bgColor};
+    color: ${(props) => props.theme.textColor};
 `;
 
 const Loading = styled.span`
@@ -38,16 +37,17 @@ const CoinTop3 = styled.ul`
 const TopCoin = styled.li`
     width: calc(100% / 3 - 3px);
     padding: 20px 10px;
-    background-color: ${(props) => props.theme.textColor};
+    background-color: ${(props) => props.theme.bgColor};
+    border-radius: 10px;
     .hashBox{
         display: flex;
         gap: 5px;
         margin-bottom: 10px;
         > span{
             padding: 3px 7px;
-            background-color: ${(props) => props.theme.bgColor};
+            background-color: ${(props) => props.theme.textColor};
             border-radius: 5px;
-            color: ${(props) => props.theme.textColor};
+            color: ${(props) => props.theme.bgColor};
             opacity: 0.5;
         }
     }
@@ -55,7 +55,7 @@ const TopCoin = styled.li`
         display: flex;
         justify-content: space-between;
         align-items: center;
-        color: ${(props) => props.theme.bgColor};
+        color: ${(props) => props.theme.textColor};
         > span{
             display: flex;
             align-items: center;
@@ -77,8 +77,9 @@ const CoinsList = styled.ul`
 
 const Coin = styled.li`
     width: calc(25% - 3px);
-    background-color: ${(props) => props.theme.textColor};
-    color: ${(props) => props.theme.bgColor};
+    background-color: ${(props) => props.theme.bgColor};
+    color: ${(props) => props.theme.textColor};
+    border-radius: 10px;
     a{
         display: block;
         padding: 20px 10px;
@@ -108,9 +109,9 @@ const Coin = styled.li`
             margin-top: 40px;
             > span{
                 padding: 3px 7px;
-                background-color: ${(props) => props.theme.bgColor};
+                background-color: ${(props) => props.theme.textColor};
                 border-radius: 5px;
-                color: ${(props) => props.theme.textColor};
+                color: ${(props) => props.theme.bgColor};
                 opacity: 0.5;
             }
         }
@@ -162,6 +163,7 @@ interface CoinData {
 }
 
 export default function Coins() {
+    const isDark = useRecoilValue(isDarkAtom);
     const {isLoading, data} = useQuery<IPriceData[]>("allCoins", fetchCoins);
     const top3RankId = data?.filter((x) => x.rank < 4).map((x) => x.id);
     const top3CoinQueries = (top3RankId || []).map(id => {
@@ -183,10 +185,7 @@ export default function Coins() {
         }
         top3Data.push({close: closeArr, time_close: timeCloseArr});
     }
-        
-    // const setIsDarkAtom = useSetRecoilState(isDarkAtom);
-    // const toggleDarkAtom = () => setIsDarkAtom((prev) => !prev);
-    // const isDark = useRecoilValue(isDarkAtom);
+            
     /* const [coins, setCoins] = useState<CoinInterface[]>([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -197,6 +196,7 @@ export default function Coins() {
             setLoading(false);
         })();
     }, []); */
+
     return (
         <Container>
             <>
@@ -232,7 +232,7 @@ export default function Coins() {
                                     ]}
                                     options={{
                                     theme: {
-                                        mode: true ? "dark" : "light",
+                                        mode: isDark ? "dark" : "light",
                                     },
                                     chart: {
                                         height: 100,
@@ -250,9 +250,13 @@ export default function Coins() {
                                         show: false,
                                     },
                                     xaxis: {
-                                        labels: { show: true },
                                         type: "datetime",
                                         categories: top3Data[i].time_close.map((date) => new Date(date * 1000).toUTCString()),
+                                        labels: {
+                                            style: {
+                                                colors: isDark ? "#ffffff" : "#000000"
+                                            }
+                                        }
                                     },
                                     fill: {
                                         type: "gradient",
@@ -278,7 +282,6 @@ export default function Coins() {
             <>
                 <Header>
                     <Title>Crypto List</Title>
-                    {/* <button onClick={toggleDarkAtom}>{isDark ? "🌕":"🌑"}</button> */}
                 </Header>
                 {isLoading ?
                 (<Loading>Loading...</Loading>)
@@ -288,10 +291,8 @@ export default function Coins() {
                     {data?.map((coin) => (
                         <Coin key={coin.id}>
                             <Link
-                                to={{
-                                pathname: `/${coin.id}`,
-                                state: { name: coin.name },
-                                }}
+                                to={{pathname: `coin/${coin.id}`}}
+                                state={{ name: coin.name }}
                             >
                                 <div className="LinkTop">
                                     <span>
