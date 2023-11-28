@@ -1,4 +1,4 @@
-# 암호화폐 OPEN API 활용한 tracker 사이트 토이프로젝트 제작
+# 암호화폐 OPEN API 활용한 tracker 토이프로젝트 제작
 
 ## 목표
 
