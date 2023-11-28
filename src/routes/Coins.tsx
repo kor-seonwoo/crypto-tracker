@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQueries, useQuery } from "react-query";
+import { useQueries, useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components"
 import { fetchCoinHistory, fetchCoins } from "../api";
@@ -56,6 +56,7 @@ const TopCoin = styled.li`
         justify-content: space-between;
         align-items: center;
         color: ${(props) => props.theme.textColor};
+        margin-bottom: 10px;
         > span{
             display: flex;
             align-items: center;
@@ -221,7 +222,7 @@ export default function Coins() {
                                 <span>${coin.quotes.USD.price.toFixed(3)}</span>
                             </div>
                             <div className="BotmBox">
-                                {true ? (
+                                {top3Data ? (
                                 <ApexCharts 
                                     type="line"
                                     series={[
