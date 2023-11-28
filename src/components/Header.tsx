@@ -9,6 +9,12 @@ const Headers = styled.header`
     width: 100%;
     height: 100%;
     padding: 20px;
+    @media screen and (max-width: 1200px) {
+        padding: 10px;
+    }
+    @media screen and (max-width: 560px) {
+        height: auto;
+    }
 `;
 
 const TopBox = styled.div`
@@ -19,12 +25,16 @@ const Title = styled.h2`
     font-size: 30px;
     font-weight: 600;
     margin-bottom: 20px;
+    @media screen and (max-width: 560px) {
+        font-size: 24px;
+    }
 `;
 
 const Description = styled.p`
     font-size: 18px;
     font-weight: 400;
     line-height: 1.4;
+    margin-bottom: 10px;
 `;
 
 const BotmBox = styled.div`
@@ -46,6 +56,15 @@ const BotmBox = styled.div`
         }
         &:hover{
             background-color: ${(props) => props.theme.accentColor};
+        }
+    }
+    @media screen and (max-width: 560px) {
+        > button{
+            padding: 4px 0;
+            font-size: 14px;
+            &.currency{
+                font-size: 14px;
+            }
         }
     }
 `;

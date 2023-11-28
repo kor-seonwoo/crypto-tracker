@@ -29,6 +29,7 @@ const Loading = styled.span`
 
 const CoinTop3 = styled.ul`
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     gap: 5px 0;
     margin-bottom: 10px;
@@ -67,6 +68,9 @@ const TopCoin = styled.li`
         img{
             width: 35px;
         }
+    }
+    @media screen and (max-width: 1024px) {
+        width: 100%;
     }
 `;
 
@@ -120,6 +124,34 @@ const Coin = styled.li`
     &:hover{
         a{
             color: ${(props) => props.theme.accentColor};
+        }
+    }
+    @media screen and (max-width: 1200px) {
+        width: calc(100% / 3 - 4px);
+    }
+    @media screen and (max-width: 1024px) {
+        width: calc(50% - 2.5px);
+    }
+    @media screen and (max-width: 560px) {
+        a{
+            .LinkTop{
+                > span{
+                    font-size: 16px;
+                }
+                img{
+                    width: 30px;
+                }
+                svg{
+                    width: 20px;
+                }
+            }
+            .LinkBottom{
+                margin-top: 30px;
+                > span{
+                    padding: 3px;
+                    font-size: 14px;
+                }
+            }
         }
     }
 `;

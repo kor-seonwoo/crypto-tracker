@@ -63,6 +63,18 @@ const Title = styled.h1<{$colorPer : string}>`
     border-radius: 3px;
     color: #ffffff;
   }
+  @media screen and (max-width: 560px){
+    img{
+      width: 28px;
+    }
+    .title{
+      font-size: 24px;
+    }
+    .price{
+      font-size: 20px;
+      margin-left: 0;
+    }
+  }
 `;
 
 const ChartBox = styled.div`
@@ -70,6 +82,9 @@ const ChartBox = styled.div`
   background-color: ${(props) => props.theme.bgColor};
   border-radius: 10px;
   margin-bottom: 10px;
+  @media screen and (max-width: 560px){
+    padding: 15px 10px;
+  }
 `;
 
 const ChartBtnBox = styled.div`
@@ -77,6 +92,9 @@ const ChartBtnBox = styled.div`
   flex-wrap: wrap;
   gap: 5px;
   width: 90px;
+  @media screen and (max-width: 560px){
+    width: 80px;
+  }
 `;
 
 const ChartBtn = styled.button<{$isActive : boolean}>`
@@ -121,6 +139,29 @@ const PriceLi = styled.ul<{$colorPer? : string}>`
     }
     svg{
       width: 60px;
+    }
+  }
+  @media screen and (max-width: 1024px){
+    font-size: 16px;
+    p{
+      font-size: 28px;
+      &.sTxt{
+        span:first-child{
+          font-size: 22px;
+        }
+      }
+      svg{
+        width: 40px;
+      }
+    }
+  }
+  @media screen and (max-width: 560px){
+    width: calc(50% - 2.5px);
+    p{
+      font-size: 22px;
+      svg{
+        width: 30px;
+      }
     }
   }
 `;

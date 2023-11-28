@@ -12,6 +12,12 @@ const Warpper = styled.div`
 
 const Infor = styled.div`
     width: 400px;
+    @media screen and (max-width: 1200px) {
+        width: 200px;
+    }
+    @media screen and (max-width: 560px) {
+        width: 100%;
+    }
 `;
 
 const Content = styled.div`
@@ -20,6 +26,14 @@ const Content = styled.div`
     padding: 30px;
     background-color: ${(props) => props.theme.bgColor2};
     overflow-y: auto;
+    @media screen and (max-width: 1200px) {
+        width: calc(100% - 200px);
+        padding: 13px;
+    }
+    @media screen and (max-width: 560px) {
+        width: 100%;
+        height: auto;
+    }
 `;
 
 export default function Layout() {

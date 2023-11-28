@@ -1,5 +1,5 @@
 import { ThemeProvider, createGlobalStyle } from "styled-components";
-import { ReactQueryDevtools } from "react-query/devtools";
+// import { ReactQueryDevtools } from "react-query/devtools";
 import { darkTheme, lightTheme } from "./theme";
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "./atoms";
@@ -88,7 +88,11 @@ const router = createBrowserRouter([
       }
     ]
   },
-]);
+],
+{
+  basename: `${process.env.PUBLIC_URL}`
+}
+);
 
 function App() {
   const isDark = useRecoilValue(isDarkAtom);
@@ -97,7 +101,7 @@ function App() {
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <GlobalReset />
         <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </ThemeProvider>
     </>
   );
