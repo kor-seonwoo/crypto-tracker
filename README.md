@@ -1,46 +1,38 @@
-# Getting Started with Create React App
+# 암호화폐 OPEN API 활용한 tracker 사이트 토이프로젝트 제작
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 목표
 
-## Available Scripts
+"coinpaprika"의 OPEN API를 react-query를 사용하여 data를 fetch하여 암호화폐의 리스트 및 상세페이지에서 코인의 가격, 차트등을 제공하는 사이트 구축.
 
-In the project directory, you can run:
+- <code>react-query</code>를 활용한 data fetch
+- <code>styled-components ThemeProvider</code>와 <code>recoil</code>을 활용한 다크모드 기능구현
+- <code>APEXCHARTS.JS</code>를 활용한 코인 별 차트 그리기
 
-### `npm start`
+## 사용스펙
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- <code>React</code>
+- <code>react-router-dom v6</code>
+- <code>react-query</code>
+- <code>recoil</code>
+- <code>TypeScript</code>
+- <code>styled-components</code>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 구동모습
 
-### `npm test`
+### # Coins 리스트 ↓
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### # Coin 상세 페이지. ↓
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+---
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 추가 및 수정 예정
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Coins 컴포넌트에서 리스트 더보기 버튼 추가
+- 화폐 KRW 단위 변환 기능 추가
+- 스켈레톤 UI 적용
