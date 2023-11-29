@@ -5,6 +5,7 @@ import { fetchCoinHistory, fetchCoins } from "../api";
 import ApexCharts from "react-apexcharts";
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "../atoms";
+import { useState } from "react";
 
 const Container = styled.div`
     width: 100%;
@@ -156,6 +157,21 @@ const Coin = styled.li`
     }
 `;
 
+const CoinAddButton = styled.button`
+    width: 100%;
+    padding: 30px 10px;
+    background-color: ${(props) => props.theme.bgColor};
+    border-radius: 10px;
+    border: none;
+    text-align: center;
+    font-size: 23px;
+    font-weight: 400;
+    margin-top: 10px;
+    &:hover{
+        color: ${(props) => props.theme.accentColor};
+    }
+`;
+
 interface IPriceData {
     id : string;
     name : string;
@@ -197,7 +213,8 @@ interface CoinData {
 
 export default function Coins() {
     const isDark = useRecoilValue(isDarkAtom);
-    const {isLoading, data} = useQuery<IPriceData[]>("allCoins", fetchCoins);
+    const [listCount, setListCount] = useState(30);
+    const {isLoading, data} = useQuery<IPriceData[]>(["allCoins",listCount], () => fetchCoins(listCount));
     const top3RankId = data?.filter((x) => x.rank < 4).map((x) => x.id);
     const top3CoinQueries = (top3RankId || []).map(id => {
         return {
@@ -218,7 +235,7 @@ export default function Coins() {
         }
         top3Data.push({close: closeArr, time_close: timeCloseArr});
     }
-            
+    
     /* const [coins, setCoins] = useState<CoinInterface[]>([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -320,30 +337,33 @@ export default function Coins() {
                 (<Loading>Loading...</Loading>)
                 :
                 (
-                <CoinsList>
-                    {data?.map((coin) => (
-                        <Coin key={coin.id}>
-                            <Link
-                                to={{pathname: `coin/${coin.id}`}}
-                                state={{ name: coin.name }}
-                            >
-                                <div className="LinkTop">
-                                    <span>
-                                        <img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} alt={coin.name} />
-                                        {coin.name} 
-                                    </span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                                    </svg>
-                                </div>
-                                <div className="LinkBottom">
-                                    <span>RANK #{coin.rank}</span>
-                                    <span>{coin.symbol}</span>
-                                </div>
-                            </Link>
-                        </Coin>
-                    ))}
-                </CoinsList>
+                <>
+                    <CoinsList>
+                        {data?.map((coin) => (
+                            <Coin key={coin.id}>
+                                <Link
+                                    to={{pathname: `coin/${coin.id}`}}
+                                    state={{ name: coin.name }}
+                                >
+                                    <div className="LinkTop">
+                                        <span>
+                                            <img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} alt={coin.name} />
+                                            {coin.name} 
+                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                                        </svg>
+                                    </div>
+                                    <div className="LinkBottom">
+                                        <span>RANK #{coin.rank}</span>
+                                        <span>{coin.symbol}</span>
+                                    </div>
+                                </Link>
+                            </Coin>
+                        ))}
+                    </CoinsList>
+                    <CoinAddButton onClick={() => setListCount(listCount + 30)}>+ Added 30 lists</CoinAddButton>
+                </>
                 )
                 }
             </>

@@ -1,7 +1,7 @@
 const BASE_URL = `https://api.coinpaprika.com/v1`;
 
-export function fetchCoins() {
-    return fetch(`${BASE_URL}/tickers?quotes=USD&limit=30`).then((response) => response.json());
+export function fetchCoins(count : number) {
+    return fetch(`${BASE_URL}/tickers?quotes=USD&limit=${count}`).then((response) => response.json());
 }
 
 export function fetchCoinInfo(coinId : string) {
