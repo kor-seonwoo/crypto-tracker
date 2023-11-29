@@ -167,6 +167,7 @@ const CoinAddButton = styled.button`
     font-size: 23px;
     font-weight: 400;
     margin-top: 10px;
+    color: ${(props) => props.theme.textColor};
     &:hover{
         color: ${(props) => props.theme.accentColor};
     }
